@@ -1,0 +1,48 @@
+:root {
+	--pry: #A0CE4E;
+	--sec: #eee;
+	--link: #1a441a;
+	--header: #444743;
+	--hover: #20231f;
+	--bg: #F6F3EC;
+	--text: #fff;
+}
+
+body {
+	margin: 0;
+	font-size: 1.2rem;
+	background: var(--bg);
+	color: var(--text);
+	font-family: serif !important;
+}
+
+h1, h2, h3, h4 {
+	color: var(--text);
+}
+
+a {
+	color: var(--link);
+	text-decoration: none;
+}
+
+.container {
+	padding: 3rem 0;
+}
+
+footer {
+	background: var(--bg);
+	padding: 1rem;
+  text-align: center;
+	box-shadow: -2px 1px 5px var(--sec);
+}
+
+.bordered {
+	border: 1px solid ;
+	padding: 1rem;
+	border-radius: 5px;
+	margin: 1rem 0;
+}
+
+.tabs > div:nth-child(n + 2) {
+	display: none;
+}

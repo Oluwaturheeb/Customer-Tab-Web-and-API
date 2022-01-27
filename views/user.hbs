@@ -1,0 +1,40 @@
+<header>
+	<div class="img">
+		{{firstLetter name}}
+	</div>
+	<div>
+		<h3>{{name}}</h3>
+		{{format debt}}
+	</div>
+</header>
+<section>
+	<div class="customers-tab">
+		<span data-id="tab" class="active">Tab</span>
+		<span data-id="payment">Payment</span>
+	</div>
+	{{#if tab}}
+	<div class="tab-content">
+		<div id="tab">
+			{{#each tab}}
+			<div class="tablist">
+				<h4>{{format price}}</h4>
+				<p>{{desc}}</p>
+				<small>{{formatTime timeAdded}}</small>
+			</div>
+			{{/each}}
+		</div>
+		<!-- tab ends here -->
+		<div id="payment">
+			{{#each paid}}
+			<div class="tablist">
+				<h4>{{format amount}}</h4>
+				<small>{{formatTime timeAdded}}</small>
+			</div>
+			{{/each}}
+		</div>
+		<!-- payment ends here -->
+	</div>
+	{{else}}
+	<h3>No data to display!</h3>
+	{{/if}}
+</section>

@@ -1,0 +1,113 @@
+		
+		<div class="container">
+			<div id="home">
+				<div class="home">
+					<h1>Customer's Tab</h1>
+					<div class="home-large">
+						<span>{{total}}</span>
+					</div>
+					<div class="exit-home">OK</div>
+				</div>
+			</div>
+			<div class="tabs">
+				<div id="customers">
+					<div class="add-btn-div">
+						<div class="add-btn">
+							<i>&plus;</i>
+							<span>Add Customer</span>
+						</div>
+					</div>
+					<div class="customers">
+						{{#if tab}}
+						{{#each tab}}
+						<div class="list">
+							<h4><a href="/user/info/{{_id}}">{{name}}</a></h4>
+							<span class="debt">
+								<span>{{debt}}</span>
+							</span>
+							<div class="dot-menu">
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+							<div class="link">
+								<a href="add" data-id="{{_id}}">Add to tab</a>
+								<a href="remove" data-id="{{_id}}">Update Payment</a>
+								<a href="/user/reset/{{_id}}" data-id="{{_id}}">Reset tab</a>
+							</div>
+						</div>
+						{{/each}}
+						{{else}}
+						<h3 style="text-align: center; margin: 2rem 0">No customers</h3>
+						{{/if}}
+					</div>
+				</div>
+				<div id="add">
+					<div class="back-div">
+						<div class="back">
+							<i>«</i>
+							<span>Back</span>
+						</div>
+					</div>
+					<h2>Add to tab</h2>
+					<form method="post" action="item/new">
+						<div>
+							<label for="amount">Amount Paid</label>
+							<input type="num" name="amount" value="0" placeholder="Amount paid" />
+
+						</div>
+						<div>
+							<label for="amount">Total price</label>
+							<input type="num" name="price" amount="" placeholder="Total price" />
+
+						</div>
+						<div>
+							<label for="goods">Description</label>
+							<textarea name="desc" id="goods" placeholder="Goods bought..."></textarea>
+							<input type="hidden" name="user">
+						</div>
+						<div>
+							<button>Submit</button>
+						</div>
+					</form>
+				</div>
+				<div id="remove">
+					<div class="back-div">
+						<div class="back">
+							<i>«</i>
+							<span>Back</span>
+						</div>
+					</div>
+					<form method="post" action="item/update">
+						<div>
+							<label for="amount">Amount paid</label>
+							<input type="num" name="amount" placeholder="Amount paid..." />
+
+						</div>
+						<div>
+							<input type="hidden" name="user">
+							<button>Submit</button>
+						</div>
+					</form>
+				</div>
+				<div id="new">
+					<div class="back-div">
+						<i>«</i>
+						<div class="back">
+							<span>Back</span>
+						</div>
+					</div>
+					<h2>New Customer</h2>
+					<form method="post" action="user/new">
+						<div>
+							<label for="amount">Customer Name</label>
+							<input type="text" name="name" placeholder="Customer name..." />
+
+						</div>
+						<div>
+							<button>Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
