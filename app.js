@@ -27,15 +27,13 @@ import apiRoute from './routes/api.js';
 dotenv.config({path: './conf/config.env'});
 
 // setup db for the app
-/*
-mongoose.connect(process.env.mongoConn, {
+
+let db = mongoose.connect(process.env.mongoConn, {
 	useNewUrlParser: true, 
-	useUnifiedTopology: true, 
-	useFindAndModify: false
+	useUnifiedTopology: true,
 })
-.then(() => console.log('Connected to DB'))
-.catch (() => console.log("Couldn't connect to Db"));
-*/
+.then()
+.catch(e => console.log(e.message));
 
 //initialize the app
 const app = express();
@@ -74,17 +72,17 @@ app.use(expressSession({
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'public')));
 
+// passport init
+app.use(passport.initialize());
+app.use(passport.session());
+Google(passport);
+
 // register our routes
 app.use('/', indexRoute);
 app.use('/user', usersRoute);
 app.use('/item', itemsRoute);
 app.use('/api', apiRoute);
 app.use('/login', authRoute);
-
-// passport init
-app.use(passport.initialize());
-app.use(passport.session());
-Google(passport);
 
 app.listen(process.env.PORT || '8000');
 export default app;

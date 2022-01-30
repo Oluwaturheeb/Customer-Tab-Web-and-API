@@ -4,51 +4,6 @@
 	--link:  #5d9634;
 }
 
-/*
-.loader {
-	background: #000000ff;
-	display: grid;
-	justify-content: center;
-	align-content: center;
-	position: fixed;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 100%;
-}
-
-.circle {
-	border-radius: 100%;
-	border: 2px solid var(--link);
-	padding: 2.5rem;
-	position: relative;
-}
-
-.border {
-	position: absolute;
-	top: 8px;
-	left: .5rem;
-}
-
-.border:after {
-	content: ' ';
-	position: absolute;
-	border-width: 2rem;
-	border-style: solid;
-	border-color: transparent var(--pry) transparent transparent;
-	border-radius: 100%;
-}
-
-.border:before {
-	content: ' ';
-	position: absolute;
-	border-width: 2rem;
-	border-style: solid;
-	border-color: transparent transparent transparent var(--pry);
-	border-radius: 100%;
-}
-*/
-
 .loader {
 	background: #000000ff;
 	display: grid;
@@ -103,22 +58,28 @@ a {
 .container {
 	padding: 0 1rem;
 }
+.home i {
+  font-size: inherit;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
 h1 {
-	font-size: 3rem;
+	font-size: 2rem;
+	margin: 0;
 }
 .home-large {
 	font-size: 2rem;
 }
 .home {
+  margin-top: 6rem;
 	display: grid;
 	justify-items: center;
-	margin-top: 3rem;
 }
 .exit-home {
 	color: #fff;
 	background: var(--pry);
 	padding: 2rem 1.8rem;
-	margin-top: 4rem;
+	margin-top: 2rem;
 	border-radius: 100%;
 }
 .tabs > div:nth-child(n + 2),

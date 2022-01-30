@@ -1,46 +1,76 @@
-import db from '../db.js';
+import db from '../models/model.js';
+import moment from 'moment';
 export const userinfo = async (req, res) => {
-	let user = await db.findOne({'_id': req.params.id})
-	let total = 0;
-	let tab = 0;
 	
-	if (user.paid && user.tab) {
-		user.paid.forEach(p => {
-			total += Number(p.amount);
-		});
-		
-		user.tab.forEach(t => {
-			tab += Number(t.price);
-		});
-		
-		total = tab - total;
+	try {
+    let user = await db.findOne({
+      '_id': req.params.id
+    });
+
+    // ini items
+    let total = 0;
+    let tab = 0;
+
+    // calculate the total debt still being owed!
+    if (user.paid && user.tab) {
+      user.paid.forEach(p => {
+        total += Number(p.paid);
+      });
+
+      user.tab.forEach(t => {
+        tab += Number(t.total);
+      });
+
+      total = tab - total;
+    }
+    total = money(total);
+	  res.render('user', {name: user.name, tab: user.tab, paid: user.paid, debt: total});
+	} catch (e) {
+	  res.send('Unknown error');
 	}
-	
-	res.render('user', {name: user.name, tab: user.tab, paid: user.paid, debt: total});
 }
 
 export const newuser = async (req, res) => {
-	let name = req.body.name;
-	let user = await db.findOne({'name': name})
-	
-	if (user) 
-		res.json({code: 0, msg: 'User exist'});
-	else
-		db.insert({
-			name: name,
-			tab: [],
-			paid: [],
-			timeAdded: new Date()
-		})
-		.then(doc => res.redirect('/'))
-		.catch(e => console.log(e))
+	// get data from req
+  const data = {
+    name: req.body.name,
+    user: req.session.passport.id
+  };
+
+  // insert d data
+  try {
+    // instantiate the
+    data.timeAdded = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
+    let newUser = new db(data);
+
+    // check if Customer exist
+    let user = await db.findOne(data);
+    if (user) res.send('Customer with the same name exist');
+    // save the new Customer
+    await newUser.save();
+    res.redirect('/');
+  } catch (e) {
+    res.send('Unknown error!' + e.message);
+  }
 }
 
 export const userreset = async (req, res) => {
-	await db.update({'_id': req.params.id}, {$unset: {
-		tab: true,
-		paid: true
-	}});
-	
+	try {
+    await db.updateOne({
+      '_id': req.params.id
+    },
+    {$unset: 
+      {
+        tab: true,
+        paid: true
+     }
+    });
+    res.json({
+      code: 1,
+      msg: 'Reset successfully!'
+    });
+  } catch (e) {
+    res.send('Unknown error ' + e.message);
+  }
 	res.redirect('/user/info/' + req.params.id)
 }

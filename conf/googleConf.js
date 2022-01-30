@@ -1,6 +1,6 @@
 import GoogleStragegy from 'passport-google-oauth20';
 import mongoose from 'mongoose';
-import User from '../models/userModel.js';
+//import User from '../models/userModel.js';
 
 const Google = passport => {
 	passport.use(new GoogleStragegy({

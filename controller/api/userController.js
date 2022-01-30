@@ -1,72 +1,94 @@
-import db from '../../db.js';
 import money from '../../conf/function.js';
 import moment from 'moment';
+import db from '../../models/model.js';
 
 export const newuser = async (req, res) => {
-	// set the header
-	res.setHeader('Content-Type', 'application/json');
+  // set the header
+  res.setHeader('Content-Type', 'application/json');
 
-	let name = req.body.name;
-	let account = req.body.account;
-	let user = await db.findOne({name: name, user: account})
-	.then()
-	.catch(e => e.message());
+  // get data from req
+  const data = {
+    name: req.body.name,
+    user: req.body.account
+  };
 
-	// check if the user check is !empty
-	if (user) 
-		res.json({code: 0, msg: 'This customer exist'});
-	else
-		// create new user
-		db.insert({
-			user: account,
-			name: name,
-			tab: [],
-			paid: [],
-			timeAdded: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a")
-		})
-		.then(doc => 
-			res.json({
-				code: 1,
-				msg: 'User created!'
-			})
-		)
-		.catch(e => console.log(e))
-}
+  // insert d data
+  try {
+    // instantiate the
+    data.timeAdded = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
+    let newUser = new db(data);
+
+    // check if Customer exist
+    let user = await db.findOne(data);
+    if (user) res.send({
+      code: 0, msg: 'Customer with the same name exist'
+    });
+    // save the new Customer
+    await newUser.save();
+    res.json({
+      code: 1, msg: data.name + ' has been added to customers list'
+    });
+  } catch (e) {
+    res.send({code: 0, msg: 'Unknown error!'});
+  }
+};
 
 export const userinfo = async (req, res) => {
-	// set the header
-	res.setHeader('Content-Type', 'application/json');
+  // set the header
+  res.setHeader('Content-Type', 'application/json');
 
-	let user = await db.findOne({'_id': req.params.id})
-	let total = 0;
-	let tab = 0;
+  try {
+    let user = await db.findOne({
+      '_id': req.params.id
+    });
 
-	// calculate the total debt still being owe!
-	if (user.paid && user.tab) {
-		user.paid.forEach(p => {
-			total += Number(p.amount);
-		});
-		
-		user.tab.forEach(t => {
-			tab += Number(t.total);
-		});
-		
-		total = tab - total;
-	}
-	total = money(total);
-	
-	res.json({name: user.name, tab: user.tab, paid: user.paid, debt: total});
-}
+    // ini items
+    let total = 0;
+    let tab = 0;
+
+    // calculate the total debt still being owed!
+    if (user.paid && user.tab) {
+      user.paid.forEach(p => {
+        total += Number(p.paid);
+      });
+
+      user.tab.forEach(t => {
+        tab += Number(t.total);
+      });
+
+      total = tab - total;
+    }
+    total = money(total);
+
+    res.json({
+      name: user.name, tab: user.tab, paid: user.paid, debt: total
+    });
+  } catch (e) {
+    res.send({code: 0, msg: 'Unknown error!'});
+  }
+};
 
 export const userreset = async (req, res) => {
-	// set the header
-	res.setHeader('Content-Type', 'application/json');
-	await db.update({'_id': req.params.id}, {$unset: {
-		tab: true,
-		paid: true
-	}});
-	res.json({
-	  code: 1,
-	  msg: 'Reset successfully!'
-	});
-}
+  // set the header
+  res.setHeader('Content-Type', 'application/json');
+  try {
+    let up = await db.updateOne({
+      '_id': req.params.id
+    },
+    {$unset: 
+      {
+        tab: [],
+        paid: []
+     }
+    },
+     {
+       multi: true
+     });
+    res.json({
+      code: 1,
+      msg: 'Reset successfully!'
+    });
+  } catch (e) {
+    res.send({code: 0, msg: 'Unknown error'});
+  }
+};

@@ -3,6 +3,7 @@
 			<div id="home">
 				<div class="home">
 					<h1>Customer's Tab</h1>
+					<i>{{user.name}}</i>
 					<div class="home-large">
 						<span>{{total}}</span>
 					</div>
@@ -53,7 +54,7 @@
 					<form method="post" action="item/new">
 						<div>
 							<label for="amount">Amount Paid</label>
-							<input type="num" name="amount" value="0" placeholder="Amount paid" />
+							<input type="num" name="paid" value="0" placeholder="Amount paid" />
 
 						</div>
 						<div>
@@ -81,8 +82,7 @@
 					<form method="post" action="item/update">
 						<div>
 							<label for="amount">Amount paid</label>
-							<input type="num" name="amount" placeholder="Amount paid..." />
-
+							<input type="num" name="paid" placeholder="Amount paid..." />
 						</div>
 						<div>
 							<input type="hidden" name="user">

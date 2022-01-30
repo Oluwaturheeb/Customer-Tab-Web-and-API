@@ -13,9 +13,7 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/auth', passport.authenticate('google', {
 	failureRedirect: '/login'
 }), (req, res) => {
-	console.log(req.body);
-	req.session(req.body);
-	res.redirect('/');
+  res.redirect('/');
 });
 
 export default router;

@@ -1,35 +1,50 @@
-import db from '../db.js';
+import db from '../models/model.js';
+import moment from 'moment';
 
 export const newitem = async (req, res) => {
-	// collect info 
-	let user = req.body.user;
-	let amount = req.body.amount;
-	
 	// fork data
-	let up = req.body;
-	up.timeAdded = new Date();
-	delete up.amount;
-	delete up.user;
+	let r = req.body,
+	  user = req.body.user;
+	  
+	// set d time
+	let time = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
 	
-	// turn the amount to obj
-	let p = {amount: amount, timeAdded: new Date()};
+	// push for paid
+	let paid = {
+	  paid: r.paid,
+	  timeAdded: time
+	};
 	
-	await db.update({'_id': user}, {$push: {tab: up, paid: p}}, {})
-	.then(doc => console.log(doc))
-	.catch(e => console.log(e));
-	res.setHeader('content-type', 'application/json');
-	res.json(user);
-	//res.redirect('/user/info/' + user)
+	delete r.paid;
+	delete r.user;
+	r.timeAdded = time;
+	let tab = r
+	
+	try {
+	  let update = await db.updateOne(
+	    {'_id': user},
+	    {$push: {
+	      tab: tab,
+	      paid: paid
+	    }},
+	  {});
+  	res.redirect('/user/info/' + user);
+	} catch (e) {
+	  res.end('Unknown error!');
+	}
 }
 
 export const updateitem = async (req, res) => {
-	let {amount, user} = req.body;
+	let {paid, user} = req.body;
+	let time = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
 	
-	await db.update({'_id': user}, {$push: {
-		paid: {amount: amount, timeAdded: new Date()}
-	}}, {})
-	
-	res.setHeader('content-type', 'application/json');
-	res.json(user);
-// 	res.redirect('/user/info/' + user);
+	try {
+	  let update = await db.updateOne(
+	    {'_id': user},
+	    {$push: {
+		    paid: {paid: paid, timeAdded: time}
+  	}}, {});res.redirect('/user/info/' + user);
+	} catch (e) {
+	  res.end('Unknown error!');
+	}
 }
