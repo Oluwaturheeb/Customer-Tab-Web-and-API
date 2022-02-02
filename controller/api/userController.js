@@ -1,70 +1,66 @@
 import money from '../../conf/function.js';
 import moment from 'moment';
-import db from '../../models/model.js';
+import query from '../../db.js';
 
 export const newuser = async (req, res) => {
-  // set the header
-  res.setHeader('Content-Type', 'application/json');
-
-  // get data from req
   const data = {
     name: req.body.name,
-    user: req.body.account
+    account: req.body.account
   };
 
-  // insert d data
-  try {
-    // instantiate the
-    data.timeAdded = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
-    let newUser = new db(data);
-
-    // check if Customer exist
-    let user = await db.findOne(data);
-    if (user) res.send({
+  res.setHeader('Content-Type', 'application/json');
+  let {count} = await query `select id from users where name = ${data.name} and account=${data.account}`;
+  
+  if (count === 1) res.send({
       code: 0, msg: 'Customer with the same name exist'
     });
-    // save the new Customer
-    await newUser.save();
+  else {
+    var q = await query `insert into users ${query(data, 'name', 'account')}`
     res.json({
       code: 1, msg: data.name + ' has been added to customers list'
     });
-  } catch (e) {
-    res.send({code: 0, msg: 'Unknown error!'});
   }
 };
 
 export const userinfo = async (req, res) => {
   // set the header
   res.setHeader('Content-Type', 'application/json');
-
+  
   try {
-    let user = await db.findOne({
-      '_id': req.params.id
+    const rows = await query `select name, total, paid, timeadded, description as desc from tab join users on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
+    
+    if (!rows.count) res.json({
+      code: 1,
+      msg: 'No debt to report!'
     });
-
-    // ini items
-    let total = 0;
-    let tab = 0;
-
-    // calculate the total debt still being owed!
-    if (user.paid && user.tab) {
-      user.paid.forEach(p => {
-        total += Number(p.paid);
+    else {
+      let total = 0,
+      paid = 0;
+      let tab = [],
+      payment = [];
+      
+      rows.forEach ((row) => {
+        total += row.total;
+        paid += row.paid;
+        
+        let time = moment(row.timeadded).format("dddd, MMMM Do YYYY, h:mm a");
+        if (row.desc !== null)
+          tab.push({desc: row.desc, total: money(row.total), timeAdded: time});
+        if (row.paid !== 0)
+          payment.push({paid: money(row.paid), timeAdded: time});
       });
-
-      user.tab.forEach(t => {
-        tab += Number(t.total);
+      
+      // send response
+      res.json({
+        code: 1,
+        name: rows[0].name,
+        debt: money(total - paid),
+        tab: tab,
+        paid: payment
       });
-
-      total = tab - total;
     }
-    total = money(total);
-
-    res.json({
-      name: user.name, tab: user.tab, paid: user.paid, debt: total
-    });
   } catch (e) {
-    res.send({code: 0, msg: 'Unknown error!'});
+    res.send({code: 0, msg: 'Unknown error!' + e.message});
   }
 };
 
@@ -72,23 +68,12 @@ export const userreset = async (req, res) => {
   // set the header
   res.setHeader('Content-Type', 'application/json');
   try {
-    let up = await db.updateOne({
-      '_id': req.params.id
-    },
-    {$unset: 
-      {
-        tab: [],
-        paid: []
-     }
-    },
-     {
-       multi: true
-     });
+    let up = await query `delete from tab where user_id = ${req.params.id}`;
     res.json({
       code: 1,
       msg: 'Reset successfully!'
     });
   } catch (e) {
-    res.send({code: 0, msg: 'Unknown error'});
+    res.send({code: 0, msg: 'Unknown error!'});
   }
 };

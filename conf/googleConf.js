@@ -1,12 +1,10 @@
 import GoogleStragegy from 'passport-google-oauth20';
-import mongoose from 'mongoose';
-//import User from '../models/userModel.js';
 
 const Google = passport => {
 	passport.use(new GoogleStragegy({
 		clientID: process.env.gID,
 		clientSecret: process.env.gSec,
-		callbackURL: 'http://localhost:8000/login/google/auth'
+		callbackURL: 'http://'+ process.env.domain +'/login/google/auth'
 	}, async (accessToken, refreshToken, profile, done) => {
 		console.log(profile);
 		done(null, profile)

@@ -1,54 +1,39 @@
-import db from '../models/model.js';
+import query from '../db.js';
 import money from '../conf/function.js';
 
 let index = async (req, res) => {
-  if (req.session.passport)
-    var user = req.session.passport.user;
-  else res.redirect('login/google');
-  
   try {
-    let list = await db.find({
-      user: user.id
-    });
+    if (req.session.passport)
+      var user = req.session.passport.user;
+    else res.redirect('login/google');
     
-    let total = 0;
-    let totalPaid = 0;
-    let allUserWithTotal = [];
-    list.forEach(t => {
-    	// set var 
-    	let it = 0;
-    	let ip = 0;
-    	let debt = 0;
+    let rows = await query `select name, id from users where account = ${user.id} order by name`;
+    let tab = [],
+    total = 0;
     
-    	if (t.tab && t.paid) {
-    		// loop for total
-    		t.tab.forEach(prices => {
-    			total += Number(prices.total);
-    			it += Number(prices.total);
-    		});
-    		
-    		// loop for amountPaid
-    		t.paid.forEach(p => {
-    			totalPaid += Number(p.price);
-    			ip += Number(p.price);
-    		});
-    		debt = it - ip;
-    	}
-    
-    	let name = t.name;
-    	let obj = {};
-    	
-    	obj.name = name;
-    	obj.debt = money(debt);
-    	obj._id = t._id;
-    	allUserWithTotal.push(obj);
-    });
-    
-    total = money(total - totalPaid);
-    
-    res.render('index', {tab: allUserWithTotal, total: total, user: user._json});
+    if (!rows.count) {
+      res.render('index', {msg: 'List is empty', user: user._json, total: money(total)});
+    } else {
+      rows.forEach(async (row, index) => {
+        let obj = {_id: row.id, name: row.name};
+        let debts = await query `select total, paid from tab where user_id = ${row.id}`;
+        if (debts.count !== 0) {
+          let d = 0;
+          debts.forEach((data, i) =>{
+            d += data.total - data.paid;
+            if (i == debts.count - 1)
+              obj.debt = money(d);
+          });
+          
+          total += d;
+        } else obj.debt = money(0);
+        tab.push(obj);
+        if (index === rows.count - 1)
+          res.render('index', {tab: tab, total: money(total)});
+      });
+    }
   } catch (e) {
-    res.end('Unknown error!');
+    res.end('Server error!' + e.message);
   }
 };
 

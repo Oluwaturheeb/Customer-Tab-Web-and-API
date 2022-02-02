@@ -1,51 +1,33 @@
-import db from '../../models/model.js';
-import moment from 'moment';
+import query from '../../db.js';
 
 export const newitem = async (req, res) => {
-	// fork data
-	let r = req.body,
-	  user = req.body.user;
-	  
-	// set d time
-	let time = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
-	
-	// push for paid
-	let paid = {
-	  paid: r.paid,
-	  timeAdded: time
+	let data = {
+	  user_id: req.body.user,
+	  paid: req.body.paid,
+	  total: req.body.total,
+	  description: req.body.desc
 	};
-	
-	delete r.paid;
-	delete r.user;
-	r.timeAdded = time;
-	let tab = r
-	
 	try {
-	  let update = await db.update(
-	    {'_id': user},
-	    {$push: {
-	      tab: tab,
-	      paid: paid
-	    }},
-	  );
-	  console.log(update)
-	  res.json({code: 1, msg: 'Added to tab successfully!'});
+	  let {count} = await query `insert into tab ${query(data)}`;
+  	if (count) res.send({code: 1, msg: 'Added to tab successfully!'});
+    else res.send({code: 0, msg: 'Unknown error!'});
 	} catch (e) {
-	  res.send({code: 0, msg: 'Unknown error!'});
+	  res.send({code: 0, msg: 'Unknown error!' + e.message});
 	}
 };
 
+
+
 export const updateitem = async (req, res) => {
-	let {paid, user} = req.body;
-	let time = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm a");
-	
+  let data = {
+    user_id: req.body.user,
+    paid: req.body.paid
+  }
+   
 	try {
-	  let update = await db.updateOne(
-	    {'_id': user},
-	    {$push: {
-		    paid: {paid: paid, timeAdded: time}
-  	}});
-  	res.json({code: 1, msg: 'Tab has been updated successfully!'});
+	  let {count} = await query `insert into tab ${query(data)}`
+  	if (count) res.json({code: 1, msg: 'Tab has been updated successfully!'});
+  	else res.send({code: 0, msg: 'Unknown error!'});
 	} catch (e) {
 	  res.send({code: 0, msg: 'Unknown error!'});
 	}

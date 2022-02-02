@@ -5,7 +5,6 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import expressSession from 'express-session';
 import passport from 'passport';
@@ -14,7 +13,9 @@ import exphbs from 'express-handlebars';
 import handlebars from 'handlebars';
 import money from './conf/function.js';
 import moment from 'moment';
-import https from 'https';
+
+// setup config
+dotenv.config({path: './conf/config.env'});
 
 // import routes handlers
 import indexRoute from './routes/index.js';
@@ -22,18 +23,6 @@ import usersRoute from './routes/users.js';
 import itemsRoute from './routes/items.js';
 import authRoute from './routes/auth.js';
 import apiRoute from './routes/api.js';
-
-// setup config
-dotenv.config({path: './conf/config.env'});
-
-// setup db for the app
-
-let db = mongoose.connect(process.env.mongoConn, {
-	useNewUrlParser: true, 
-	useUnifiedTopology: true,
-})
-.then()
-.catch(e => console.log(e.message));
 
 //initialize the app
 const app = express();

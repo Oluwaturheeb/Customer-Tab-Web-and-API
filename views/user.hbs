@@ -4,7 +4,7 @@
 	</div>
 	<div>
 		<h3>{{name}}</h3>
-		{{format debt}}
+		{{debt}}
 	</div>
 </header>
 <section>
@@ -17,9 +17,9 @@
 		<div id="tab">
 			{{#each tab}}
 			<div class="tablist">
-				<h4>{{format price}}</h4>
+				<h4>{{total}}</h4>
 				<p>{{desc}}</p>
-				<small>{{formatTime timeAdded}}</small>
+				<small>{{timeAdded}}</small>
 			</div>
 			{{/each}}
 		</div>
@@ -27,8 +27,8 @@
 		<div id="payment">
 			{{#each paid}}
 			<div class="tablist">
-				<h4>{{format amount}}</h4>
-				<small>{{formatTime timeAdded}}</small>
+				<h4>{{paid}}</h4>
+				<small>{{timeAdded}}</small>
 			</div>
 			{{/each}}
 		</div>
