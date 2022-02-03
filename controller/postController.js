@@ -2,8 +2,6 @@ import query from '../db.js';
 import money from '../conf/function.js';
 
 let index = async (req, res) => {
-  res.setHeader('content-type', 'application/json');
-  res.send(query);
   try {
     if (req.session.passport)
       var user = req.session.passport.user;
