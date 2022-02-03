@@ -3,8 +3,10 @@ import dotenv from 'dotenv';
 
 // setup config
 dotenv.config({path: './conf/config.env'});
-console.log(process.env);
-const query = await postgres(process.env.DATABASE_URL || 'postgres://superuser@localhost:5432/customer_tab');
+console.log(process.env.DATABASE_URL);
+const query = postgres(process.env.DATABASE_URL || 'postgres://superuser@localhost:5432/customer_tab', {
+  ssl: true,
+});
 console.log(query);
 // let table = await query ``;
 // let table = await query `create table if not exists users(id bigserial primary key, account bigint not null, name varchar(50));
