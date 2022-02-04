@@ -10,6 +10,6 @@ const query = postgres({
   host: process.env.dbHost,
   port: process.env.dbPort,
   database: process.env.db,
-  ssl: process.env.ssl
+  ssl: {rejectUnauthorized: process.env.ssl}
 });
 export default query;
