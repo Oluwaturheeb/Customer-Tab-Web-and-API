@@ -27,7 +27,7 @@ export const userinfo = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   
   try {
-    const rows = await query `select name, total, paid, timeadded, description as desc from tab join users on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
+    const rows = await query `select name, total, paid, timeadded, description as desc from users left join tab on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
     
     if (!rows.count) res.json({
       code: 1,

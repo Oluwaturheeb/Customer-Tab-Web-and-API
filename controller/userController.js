@@ -4,7 +4,7 @@ import money from '../conf/function.js';
 
 export const userinfo = async (req, res) => {
 	try {
-    const rows = await query `select name, total, paid, timeadded, description as desc from tab join users on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
+    const rows = await query `select name, total, paid, timeadded, description as desc from users left join tab on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
     let total = 0,
     paid = 0;
     let tab = [],
