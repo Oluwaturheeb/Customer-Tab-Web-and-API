@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 // setup config
 dotenv.config({path: './conf/config.env'});
 
-const query = postgres(process.env.DATABASE_URL, {
+const query = postgres({
   user: process.env.dbUser,
   password: process.env.dbPassword,
   host: process.env.dbHost,
@@ -12,5 +12,4 @@ const query = postgres(process.env.DATABASE_URL, {
   database: process.env.db,
   ssl: process.env.ssl
 });
-
 export default query;

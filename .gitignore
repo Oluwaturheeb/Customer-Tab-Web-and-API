@@ -1,2 +1,6 @@
 node_modules
+<<<<<<< HEAD
 public/assets/app/
+=======
+public/assets/app/app-debug.apk
+>>>>>>> parent of 4b75756 (updated)

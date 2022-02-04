@@ -32,7 +32,7 @@ let index = async (req, res) => {
       });
     }
   } catch (e) {
-    res.send({code: 0, msg: 'Unknown error!'});
+    res.send({code: 0, msg: e.message});
   }
 };
 
