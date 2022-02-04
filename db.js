@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 // setup config
 dotenv.config({path: './conf/config.env'});
 
-const query = postgres(DATABASE_URL, {
+const query = postgres(process.env.DATABASE_URL, {
   user: process.env.dbUser,
   password: process.env.dbPassword,
   host: process.env.dbHost,
