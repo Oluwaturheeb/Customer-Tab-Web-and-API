@@ -33,6 +33,7 @@ let index = async (req, res) => {
       });
     }
   } catch (e) {
+    console.log(e)
     res.end('Server error!' + e.message);
   }
 };

@@ -1,0 +1,39 @@
+<div class="container">
+  <h1>Download</h1>
+  <h3>Customer Tab</h3>
+  <img src="assets/img/download.png" width="200" height="200" style="margin: 1rem 0">
+<a id="app" href="/download-app/">Download Customer Tab.apk</a>
+</div>
+
+<footer class="footer">
+  <a href="https://www.flaticon.com/free-icons/download" title="download icons">Download icons created by iconmas - Flaticon</a>
+</footer>
+<style>
+    h1, h3 {
+      color: green;
+    }
+    
+  .container {
+    display:flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    box-shadow: -2px -2px 2px #ddd;
+  }
+</style>
+<script>
+  var dev = navigator.platform.split(' ')[1];
+  var url = $('#app').attr('href') + dev;
+  $('a').attr('href', url);
+</script>

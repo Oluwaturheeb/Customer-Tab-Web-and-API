@@ -32,10 +32,3 @@ export const updateitem = async (req, res) => {
 	  res.send('Server error!' + e.message);
 	}
 };
-
-export const download = (req, res) => {
-  console.log(path)
-  res.setHeader('content-type', 'application/vnd.android.package-archive');
-  res.setHeader('content-disposition', 'attachment;filename=Customers_Tab.apk');
-  res.download(path.join(path.resolve() + '/public/assets/app/app-debug.apk'));
-}
