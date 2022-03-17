@@ -19,8 +19,8 @@ dotenv.config({path: './conf/config.env'});
 
 // import routes handlers
 import indexRoute from './routes/index.js';
-import usersRoute from './routes/users.js';
-import itemsRoute from './routes/items.js';
+// import usersRoute from './routes/users.js';
+// import itemsRoute from './routes/items.js';
 import authRoute from './routes/auth.js';
 import apiRoute from './routes/api.js';
 
@@ -58,7 +58,7 @@ app.use(expressSession({
 	saveUninitialized: false,
 }));
 
-const __dirname = path.resolve();
+let __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'public')));
 
 // passport init
@@ -67,9 +67,9 @@ app.use(passport.session());
 Google(passport);
 
 // register our routes
-app.use('/', indexRoute);
-app.use('/user', usersRoute);
-app.use('/item', itemsRoute);
+  app.use('/', indexRoute);
+// app.use('/user', usersRoute);
+// app.use('/item', itemsRoute);
 app.use('/api', apiRoute);
 app.use('/login', authRoute);
 

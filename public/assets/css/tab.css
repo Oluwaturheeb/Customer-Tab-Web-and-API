@@ -1,7 +1,12 @@
 :root {
-	--pry:#67e016;;
+	--pry:#67e016;
 	--txt:#fff;
 	--link:  #5d9634;
+	--sec: #eee;
+	--header: #444743;
+	--hover: #20231f;
+	--bg: #F6F3EC;
+	--text: #fff;
 }
 
 .loader {
@@ -46,7 +51,7 @@
 
 body {
 	margin: 0;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	color: var(--pry);
 	overflow: scroll;
 }
@@ -88,30 +93,37 @@ h1 {
 	display: none;
 }
 
-.add-btn-div, .back-div {
-	text-align: center;
-	margin: 1rem 0 2rem;
+.balance {
+  background: var(--sec);
+  margin: 0 -1rem 0 -1rem;
+  padding: 1px 10px;
 }
 
-.back-div {
-	text-align: left;
+.add-btn {
+  position: absolute;
+  padding: 5px 1.2rem;
+  bottom: 2rem;
+  right: 2rem;
+  border-radius: 100%;
+  background: var(--pry);
+  color: var(--text);
 }
 
-.add-btn, .back {
-	display: inline-block;
-	background: var(--pry);
-	color: #fff;
-	padding: 0 1rem;
+.back {
+  display: inline-block;
+  background: var(--pry);
+  color: var(--text);
+  padding: 0px 10px;
+}
+
+.back span {
+  position: relative;
+  bottom: 8px;
 }
 
 i {
 	font-size: 3rem;
 	font-style: normal;
-}
-
-.add-btn span, .back span {
-	position: relative;
-	bottom: 10px;
 }
 
 .customers > div:even {

@@ -5,14 +5,178 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Customer Tab</title>
-		<meta name="description" content="" />
+		<meta name="author" content="Bello Toheeb(devTee)" />
+		<meta name="description" content="Manage your customers credit tab and yours!" />
+    <meta name="theme-color" content="#67e016"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/tab.css" />
 		<script src="assets/js/jquery.js"></script>
 		<script src="assets/js/Validate.js"></script>
 	</head>
-	<body>
+	<body>	
+	  <nav class="">
+		<div class="logo">
+			<div class="dp-menu">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			<a href="/" class="logo-">
+				Customer Tab<br>
+				<small>{{email}}</small>
+			</a>
+		<div class="dp-link">
+			<a href="mytab" id="mytab">My Tab</a>
+			<a href="otherstab" id="other">Other Tab</a>
+			<a href="/download">Download App</a>
+		</div>
+		</div>
+	</nav>
+	<style type="text/css">
+		.container {
+			padding: 5rem 1rem 1rem 1rem;
+			transition-duration: 1s;
+		}
+
+		nav {
+			background: var(--text);
+			display: flex;
+			justify-content: start;
+			align-items: center;
+			padding: 5px 10px;
+			position: fixed;
+			width: calc(100% - .5rem);
+			box-shadow: 0 0 .5rem #aaa;
+			z-index: 101;
+		}
+
+		nav .logo {
+			display: flex;
+			align-items: center;
+		}
+		
+		.logo- small {
+		  font-weight: normal;
+		  font-size: 1rem;
+		}
+
+		.logo .dp-menu {
+			cursor: pointer;
+			padding: 5px;
+			display: inline-block;
+			padding: 1rem 10px;
+			transition-duration: 1s;
+			margin-right: 10px;
+		}
+
+		.logo .dp-menu:hover,
+		.logo .dp-menu:focus {
+			opacity: 1
+		}
+
+		.logo .dp-menu span {
+			display: block;
+			background: var(--pry);
+			padding: 2px .9rem;
+			margin: 5px;
+		}
+
+		.logo .dp-menu span:nth-child(even) {
+			margin: 5px 0px 5px 5px;
+		}
+
+		.logo .dp-link {
+			margin-left: -50rem;
+			position: fixed;
+			left: 0;
+			top: 5rem;
+			background: var(--text);
+			box-shadow: 0 5px 0 var(--pry);
+			width: 10rem;
+			height: 100%;
+			transition-duration: 1s;
+			z-index: 100;
+		}
+
+		.logo .dp-link a {
+			display: block;
+			padding: 10px;
+			border-bottom: 1px solid var(--sec);
+		}
+
+		nav .logo a[href='/'] {
+			color: var(--pry);
+			font-weight: bold;
+			font-size: 1.5rem;
+		}
+
+		nav .links {
+			display: flex;
+		}
+
+		nav .links a,
+		nav .logo .dp-link a {
+			color: var(--pry);
+			display: block;
+			padding: 1rem
+		}
+
+		.links a:hover,
+		.links a:focus,
+		.dp-link a:hover,
+		.dp-link a:focus {
+			border-bottom: 2px solid var(--sec);
+			margin-bottom: -2px;
+			font-weight: bold;
+		}
+		.dp-link a:hover,
+		.dp-link a:focus {
+			background: var(--sec);
+			color: var(--pry) !important;
+		}
+
+		@media (min-width: 576px) {
+			.links a {
+				display: block !important;
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		$('.dp-menu').click(() => {
+
+			if ($('.dp-menu').hasClass('active')) {
+				$('.dp-link').css({
+					'margin-left': '-50rem'
+				})
+				$('.dp-menu').removeClass('active');
+				$('.container').css({
+					'margin-left': 0
+				});
+			} else {
+				$('.dp-link').css({
+					'margin-left': 0
+				})
+				$('.dp-menu').addClass('active')
+				$('.container').css({
+					'margin-left': '11rem'
+				});
+			}
+		});
+	</script>
 		{{{body}}}
 		<script src="assets/js/new.js"></script>
+<footer class="footer">
+  Created by devTee<br>
+  Copyright &copy; 2021
+</footer>
+<style>
+  .footer {
+    padding: 10px;
+    text-align: center;
+    box-shadow: 2px 0 2px #aaa;
+    color: #333;
+  }
+</style>
+
 	</body>
 </html>

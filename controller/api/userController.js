@@ -1,66 +1,29 @@
 import money from '../../conf/function.js';
 import moment from 'moment';
-import query from '../../db.js';
+import {myTab, otherTab, field} from '../../db.js';
 
 export const newuser = async (req, res) => {
-  const data = {
-    name: req.body.name,
-    account: req.body.account
-  };
-
   res.setHeader('Content-Type', 'application/json');
-  let {count} = await query `select id from users where name = ${data.name} and account=${data.account}`;
-  
-  if (count === 1) res.send({
-      code: 0, msg: 'Customer with the same name exist'
-    });
-  else {
-    var q = await query `insert into users ${query(data, 'name', 'account')}`
-    res.json({
-      code: 1, msg: data.name + ' has been added to customers list'
-    });
-  }
-};
 
-export const userinfo = async (req, res) => {
-  // set the header
-  res.setHeader('Content-Type', 'application/json');
-  
   try {
-    const rows = await query `select name, total, paid, timeadded, description as desc from users left join tab on users.id = user_id where users.id = ${req.params.id} order by timeadded desc`;
+    const data = {
+      account: req.body.account,
+      name: req.body.name
+    };
+    if (req.body.type == 1) var db = myTab; else db = otherTab;
+    let check = await db.where('account', '==', data.account).where('name', '==', data.name).get();
     
-    if (!rows.count) res.json({
-      code: 1,
-      msg: 'No debt to report!'
-    });
-    else {
-      let total = 0,
-      paid = 0;
-      let tab = [],
-      payment = [];
-      
-      rows.forEach ((row) => {
-        total += row.total;
-        paid += row.paid;
-        
-        let time = moment(row.timeadded).format("dddd, MMMM Do YYYY, h:mm a");
-        if (row.desc !== null)
-          tab.push({desc: row.desc, total: money(row.total), timeAdded: time});
-        if (row.paid !== 0)
-          payment.push({paid: money(row.paid), timeAdded: time});
+    if (check.empty) {
+      await db.add(data);
+      res.send({
+        code: 1, msg: data.name + ' has been added to customers list'
       });
-      
-      // send response
-      res.json({
-        code: 1,
-        name: rows[0].name,
-        debt: money(total - paid),
-        tab: tab,
-        paid: payment
+    } else 
+      res.send({
+        code: 0, msg: 'Customer with the same name exist'
       });
-    }
   } catch (e) {
-    res.send({code: 0, msg: 'Unknown error!' + e.message});
+    res.send({code: 0, msg: e.message});
   }
 };
 
@@ -68,12 +31,30 @@ export const userreset = async (req, res) => {
   // set the header
   res.setHeader('Content-Type', 'application/json');
   try {
-    let up = await query `delete from tab where user_id = ${req.params.id}`;
-    res.json({
-      code: 1,
-      msg: 'Reset successfully!'
+    if (req.body.type == 1) var db = myTab;
+    else db = otherTab;
+    
+    let up = await db.doc(req.body.id).update({
+      tab: field.delete(),
+      payment: field.delete(),
     });
+    
+    if (req.body.delete) {
+      up = db.doc(req.body.id).delete();
+    
+      if (up) 
+        res.json({
+          code: 1,
+          msg: 'Reset successfully!'
+        });
+    }
+    
+    if (up && !req.body.delete)
+      res.json({
+        code: 1,
+        msg: 'Reset successfully!'
+      });
   } catch (e) {
-    res.send({code: 0, msg: 'Unknown error!'});
+    res.send({code: 0, msg: 'Unknown error!' + e.message});
   }
 };

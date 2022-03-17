@@ -8,7 +8,7 @@ import {userinfo, newuser, userreset} from '../controller/userController.js';
 const userInfo = router.get('/info/:id', userinfo);
 
 // reset user tab
-const userReset = router.get('/reset/:id', userreset);
+const userReset = router.post('/reset', userreset);
 
 // create new user
 const addUser = router.post('/new', newuser);

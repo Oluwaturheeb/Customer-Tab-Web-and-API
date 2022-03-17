@@ -16,26 +16,47 @@
 	});
  // tabs
 
-	$('.link a, .add-btn').click(function (e) {
-	// Reset is a direct link
-		if ($(this).html() == 'Reset tab') {
-			let c = confirm('Are you sure to reset this customer tab!');
-			if (!c) e.preventDefault();
-		} else e.preventDefault();
-		
-		if ($(this).hasClass('add-btn')) {
+	$('.link a, .add-btn, .dp-link a').click(function (e) {
+	  if ($(this).attr('href') != '/download') e.preventDefault();
+		if ($(this).hasClass('reset')) {
+		  let del = $(this).attr('data-delete');
+		  if (!del) var c = confirm('Are you sure to reset this customer tab!');
+			else c = confirm('Are you sure to remove this customer tab!');
+			
+			if (c)
+			  $.ajax({
+			    url: 'api/user/reset',
+			    type: 'post',
+			    data: {
+			      type: $('input[name=type]').val(),
+			      delete: del,
+			      id: $(this).attr('data-id'),
+			    },
+			    success: e => {
+			      alert(e.msg);
+			      setTimeout(() => location.reload(), 2000);
+			    },
+			    error: e => {
+			      alert(e.msg);
+			    },
+			  })
+		} else if ($(this).hasClass('add-btn')) {
 			var id = 'new';
 		} else {
 			id = $(this).attr('href');
 			$('input[name=user]').val($(this).attr('data-id'));
 		}
 		
+		if (id == 'mytab')
+		  $('input[name=type]').val(1);
+		else if (id == 'otherstab')
+		  $('input[name=type]').val(2);
+		  
+		
 		$('.tabs #'+ id).slideDown(1000).siblings().slideUp();
 	});
 	
-	$('.back').click(() => {
-		$('.tabs #customers').slideDown(100).siblings().slideUp();
-	});
+	$('.back').click(() => $('.tabs #mytab').slideDown(100).siblings().slideUp());
 	
 	// customers tab
 	$('.customers-tab span').click(function () {
@@ -46,10 +67,28 @@
 	
 	 // calling validate on the form
 	 $('form').submit(function(e) {
+	   e.preventDefault();
 	 	v.autoForm(this);
 	 	if (v.err()) {
 	 		e.preventDefault();
-	 		alert(v.err());
+	 		$(this).find('.info').html(v.err()).css({color: 'red'});
+	 		setTimeout(() => $(this).find('.info').html(''), 3000);
+	 	} else {
+	 	  alert(v.auto)
+	 	  $.ajax({
+	 	    url: $(this).attr('action'),
+	 	    type: 'post',
+	 	    data: v.auto,
+	 	    beforeSend: () => $(this).find('.info').html('Connecting to the server...').css({color: '#333'}),
+	 	    success: e => {
+	 		    $(this).find('.info').html(e.msg).css({color: 'green'});
+	 		    if (e.code == 1)
+	 		      setTimeout(() => location.reload(), 3000);
+	 	    },
+	 	    error: e => {alert(JSON.stringify(e))
+	 	      $(this).find('.info').html(e.msg).css({color: 'red'});
+	 	    }
+	 	  });
 	 	}
-	 })
+	 });
 })(jQuery);

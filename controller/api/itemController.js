@@ -1,33 +1,39 @@
-import query from '../../db.js';
+import {myTab, otherTab, field} from '../../db.js';
 
 export const newitem = async (req, res) => {
 	let data = {
-	  user_id: req.body.user,
 	  paid: req.body.paid,
 	  total: req.body.total,
-	  description: req.body.desc
+	  description: req.body.desc,
+	  timeAdded: new Date(),
 	};
 	try {
-	  let {count} = await query `insert into tab ${query(data)}`;
-  	if (count) res.send({code: 1, msg: 'Added to tab successfully!'});
-    else res.send({code: 0, msg: 'Unknown error!'});
+	  if (req.body.type == 1) var tab = myTab; else tab = otherTab;
+	  
+	  let update = await tab.doc(req.body.user).update({tab: field.arrayUnion(data)});
+	  console.log(update);
+	  
+	  if (update) res.send({code: 1, msg: 'Added to tab successfully!'});
+	  else res.send({code: 0, msg: 'Unknown error!'});
 	} catch (e) {
 	  res.send({code: 0, msg: 'Unknown error!' + e.message});
 	}
 };
 
-
-
 export const updateitem = async (req, res) => {
   let data = {
-    user_id: req.body.user,
-    paid: req.body.paid
-  }
+    paid: req.body.paid,
+    timeAdded: new Date()
+  };
    
 	try {
-	  let {count} = await query `insert into tab ${query(data)}`
-  	if (count) res.json({code: 1, msg: 'Tab has been updated successfully!'});
-  	else res.send({code: 0, msg: 'Unknown error!'});
+	  if (req.body.type == 1) var tab = myTab; else tab = otherTab;
+	  
+	  let update = await tab.doc(req.body.user).update({payment: field.arrayUnion(data)});
+	  console.log(update);
+	  
+	  if (update) res.send({code: 1, msg: 'Tab updated successfully!'});
+	  else res.send({code: 0, msg: 'Unknown error!'});
 	} catch (e) {
 	  res.send({code: 0, msg: 'Unknown error!'});
 	}

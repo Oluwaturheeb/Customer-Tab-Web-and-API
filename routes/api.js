@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 // import controllers
-import {userinfo, newuser, userreset} from '../controller/api/userController.js';
+import {newuser, userreset} from '../controller/api/userController.js';
 import index from '../controller/api/postController.js';
 import {newitem, updateitem} from '../controller/api/itemController.js';
 
@@ -11,9 +11,9 @@ import {newitem, updateitem} from '../controller/api/itemController.js';
 router.get('/:user', index);
 
 // user router
-const userInfo = router.get('/user/info/:id', userinfo);
+// const userInfo = router.get('/user/info/:id', userinfo);
 // reset user tab
-const userReset = router.get('/user/reset/:id', userreset);
+const userReset = router.post('/user/reset/', userreset);
 // create new user
 const addUser = router.post('/user/new', newuser);
 

@@ -1,26 +1,12 @@
-import postgres from 'postgres';
-import dotenv from 'dotenv';
+import { initializeApp, applicationDefault, cert } from 'firebase-admin/app';
+import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
+import fs from 'fs';
 
-// setup config
-dotenv.config({path: './conf/config.env'});
+let conf = fs.readFileSync('./devtee-93ae3-6ed56c9d4b51.json','utf-8' );
 
-// const query = postgres({
-//   user: process.env.dbUser,
-//   password: process.env.dbPassword,
-//   host: process.env.dbHost,
-//   port: process.env.dbPort,
-//   database: process.env.db,
-//   ssl: {rejectUnauthorized: false}
-// });
-
-const query = postgres({
-  user: 'superuser',
-  password: 'password',
-  host: 'localhost',
-  port: 5432,
-  database: 'customer_tab',
-  ssl: false,//{rejectUnauthorized: false}
-});
+initializeApp({credential: cert(JSON.parse(conf))});
 
 
-export default query;
+export const myTab = getFirestore().collection('customerTab');
+export const otherTab = getFirestore().collection('otherTab');
+export const field = FieldValue;

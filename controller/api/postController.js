@@ -1,4 +1,4 @@
-import query from '../../db.js';
+import {myTab, otherTab} from '../../db.js';
 import money from '../../conf/function.js';
 
 let index = async (req, res) => {
@@ -6,29 +6,64 @@ let index = async (req, res) => {
   res.setHeader('content-type', 'application/json');
   
   try {
-    let {user} = req.params;
-    let rows = await query `select name, id from users where account = ${user}`;
-    let tab = [],
-    total = 0;
-    if (!rows.count) {
-      res.send({code: 1, msg: 'List is empty'});
-    } else {
-      rows.forEach(async (row, index) => {
-        let obj = {_id: row.id, name: row.name};
-        let debts = await query `select total, paid from tab where user_id = ${row.id}`;
-        if (debts.count !== 0) {
-          let d = 0;
-          debts.forEach((data, i) =>{
-            d += data.total - data.paid;
-            if (i == debts.count - 1)
-              obj.debt = money(d);
+    const tabTotal = (tab, main) => {
+      let total = 0;
+      if (tab.tab != undefined || tab.payment != undefined)
+        tab.tab.forEach(tEach => {
+          total += tEach.total - tEach.paid;
+        });
+      if (tab.payment != undefined)
+        tab.payment.forEach(tEach => {
+          total = total - tEach.paid
+        });
+      
+      return {
+        total: total,
+        allTotal: main + total
+      };
+    };
+    
+    let customers = await myTab.where('account', '==', req.params.user).get();
+    let others = await otherTab.where('account', '==', req.params.user).get();
+    
+    if (customers.empty && others.empty) {
+      res.send({
+        code: 1, 
+        msg: 'List is empty',
+        total: money(0)
+      });
+    }
+    else {
+      const extract = db => {
+        let data = [], iniT = 0;
+        
+        if (db.size > 0)
+          db.docs.forEach(doc => {
+            let {total, allTotal} = tabTotal(doc.data(), iniT);
+            
+            data.push({
+              id: doc.id,
+              name: doc.data().name,
+              total: money(total),
+              details: {
+                info: doc.data().tab,
+                payment: doc.data().payment
+              }
+            });
+            iniT = allTotal;
           });
-          
-          total += d;
-        } else obj.debt = money(0);
-        tab.push(obj);
-        if (index === rows.count - 1)
-          res.json({code: 1, tab: tab, total: money(total)});
+        
+        return {tab: data, total: iniT};
+      };
+      let myTab = extract(customers),
+      othersTab = extract(others);
+      
+      res.send({
+        code: 1,
+        myTabTotal: money(myTab.total),
+        myTab: myTab.tab,
+        othersTabTotal: money(othersTab.total),
+        othersTab: othersTab.tab
       });
     }
   } catch (e) {

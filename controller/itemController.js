@@ -1,4 +1,4 @@
-import query from '../db.js';
+import {myTab, otherTab} from '../../db.js';
 import path from 'path';
 
 export const newitem = async (req, res) => {
