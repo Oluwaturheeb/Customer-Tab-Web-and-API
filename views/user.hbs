@@ -1,40 +1,51 @@
-<header>
-	<div class="img">
-		{{firstLetter name}}
-	</div>
-	<div>
-		<h3>{{name}}</h3>
-		{{debt}}
-	</div>
-</header>
-<section>
-	<div class="customers-tab">
-		<span data-id="tab" class="active">Tab</span>
-		<span data-id="payment">Payment</span>
-	</div>
-	{{#if tab}}
-	<div class="tab-content">
-		<div id="tab">
-			{{#each tab}}
-			<div class="tablist">
-				<h4>{{total}}</h4>
-				<p>{{desc}}</p>
-				<small>{{timeAdded}}</small>
-			</div>
-			{{/each}}
-		</div>
-		<!-- tab ends here -->
-		<div id="payment">
-			{{#each paid}}
-			<div class="tablist">
-				<h4>{{paid}}</h4>
-				<small>{{timeAdded}}</small>
-			</div>
-			{{/each}}
-		</div>
-		<!-- payment ends here -->
-	</div>
-	{{else}}
-	<h3>No data to display!</h3>
-	{{/if}}
-</section>
+<div class="container">
+  <header>
+    <div class="img">
+      {{firstLetter name}}
+    </div>
+    <div>
+      <h3>{{name}}</h3>
+      {{total}}
+    </div>
+  </header>
+  <section>
+    <div class="customers-tab">
+      <span data-id="tab" class="active">Tab</span>
+      <span data-id="payment">Payment</span>
+    </div>
+    {{#if details.info}}
+    <div class="tab-content">
+      <div id="tab">
+        {{#each details.info}}
+        <div class="tablist">
+          <h3>{{format total}}</h3>
+          <b>Description</b><br>
+          <p>
+            {{description}}
+          </p>
+          <small>{{{formatTime timeAdded._seconds}}}</small>
+        </div>
+        {{/each}}
+      </div>
+      <!-- tab ends here -->
+      <div id="payment">
+        {{#each details.payment}}
+        <div class="tablist">
+          <h3>{{format paid}}</h3>
+          <small>{{formatTime timeAdded._seconds}}</small>
+        </div>
+        {{/each}}
+        {{#each details.info}}
+        <div class="tablist">
+          <h3>{{format paid}}</h3>
+          <small>{{formatTime timeAdded._seconds}}</small>
+        </div>
+        {{/each}}
+      </div>
+      <!-- payment ends here -->
+    </div>
+    {{else}}
+    <h3>No data to display!</h3>
+    {{/if}}
+  </section>
+</div>

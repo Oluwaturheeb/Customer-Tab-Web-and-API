@@ -1,10 +1,14 @@
 import path from 'path';
+import {download as appDownload, field} from '../db.js';
 
-export const downloadPage = (req, res) => {
-  return res.render('download');
+export const downloadPage = async (req, res) => {
+  let count = await appDownload.get();
+  count = count.docs.map(data => data.data());
+  console.log(count)
+  return res.render('download', count[0]);
 };
 
-export const download = (req, res) => {
+export const download = async (req, res) => {
   res.setHeader('content-type', 'application/vnd.android.package-archive');
   res.setHeader('content-disposition', 'attachment;filename=Customers Tab.apk');
   let index = str => {
@@ -33,6 +37,8 @@ export const download = (req, res) => {
     
     return path.join(path.resolve() + '/public/assets/app/' + app);
   }
+  
+  await appDownload.doc('downloadCount').update({count: field.increment(1)});
   
   if (index('armv8'))
     res.download(file(1));

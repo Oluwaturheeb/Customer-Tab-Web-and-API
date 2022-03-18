@@ -14,8 +14,11 @@
   <div class="tabs">
     <div id="mytab">
       <div class="balance" onclick="() => alert({{myTabTotal}})">
-        <h2>Total Credit</h2>
-        <h4>{{myTabTotal}}</h4>
+        <div>
+          <h2>Total Credit</h2>
+          <small>(My Tab)</small>
+        </div>
+        <h3>{{myTabTotal}}</h3>
       </div>
       <div class="add-btn-div">
         <div class="add-btn">
@@ -26,7 +29,7 @@
         {{#if myTab}}
         {{#each myTab}}
         <div class="list">
-          <h4><a href="/user/info/{{id}}">{{name}}</a></h4>
+          <h4><a href="/user/info/{{id}}/1" class="toInfo">{{name}}</a></h4>
           <span class="debt">
             <span>{{total}}</span>
           </span>
@@ -50,8 +53,11 @@
     </div>
     <div id="otherstab">
       <div class="balance" onclick="() => alert({{myTabTotal}})">
-        <h2>Total Credit</h2>
-        <h4>{{othersTabTotal}}</h4>
+        <div>
+          <h2>Total Credit</h2>
+          <small>(My Credit Tab)</small>
+        </div>
+        <h3>{{othersTabTotal}}</h3>
       </div>
       <div class="add-btn-div">
         <div class="add-btn">
@@ -62,7 +68,7 @@
         {{#if othersTab}}
         {{#each othersTab}}
         <div class="list">
-          <h4><a href="/user/info/{{id}}">{{name}}</a></h4>
+          <h4><a href="/user/info/{{id}}/1" class="toInfo">{{name}}</a></h4>
           <span class="debt">
             <span>{{total}}</span>
           </span>

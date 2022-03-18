@@ -19,8 +19,7 @@ dotenv.config({path: './conf/config.env'});
 
 // import routes handlers
 import indexRoute from './routes/index.js';
-// import usersRoute from './routes/users.js';
-// import itemsRoute from './routes/items.js';
+import usersRoute from './routes/users.js';
 import authRoute from './routes/auth.js';
 import apiRoute from './routes/api.js';
 
@@ -33,7 +32,7 @@ app.set('view engine', '.hbs');
 
 // register helpers
 handlebars.registerHelper('formatTime', time => {
-	return moment(time).format("dddd, MMMM Do YYYY, h:mm a")
+	return moment(new Date(time * 1000)).format("dddd, MMMM Do YYYY, h:mm a")
 });
 
 handlebars.registerHelper('format', num => {
@@ -68,8 +67,7 @@ Google(passport);
 
 // register our routes
   app.use('/', indexRoute);
-// app.use('/user', usersRoute);
-// app.use('/item', itemsRoute);
+app.use('/user', usersRoute);
 app.use('/api', apiRoute);
 app.use('/login', authRoute);
 

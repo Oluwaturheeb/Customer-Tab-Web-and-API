@@ -80,6 +80,8 @@ let index = async (req, res) => {
         email: user.emails[0].value,
         account: user.id,
       };
+      req.session.mytab = resp.myTab;
+      req.session.othertab = resp.othersTab;
     }
     
     res.render('index', resp);

@@ -18,6 +18,7 @@
 
 	$('.link a, .add-btn, .dp-link a').click(function (e) {
 	  if ($(this).attr('href') != '/download') e.preventDefault();
+		
 		if ($(this).hasClass('reset')) {
 		  let del = $(this).attr('data-delete');
 		  if (!del) var c = confirm('Are you sure to reset this customer tab!');
@@ -47,16 +48,26 @@
 			$('input[name=user]').val($(this).attr('data-id'));
 		}
 		
-		if (id == 'mytab')
+		if (id == 'mytab') {
 		  $('input[name=type]').val(1);
-		else if (id == 'otherstab')
+		  $(this).addClass('active').siblings().removeClass('active');
+		} else if (id == 'otherstab') {
 		  $('input[name=type]').val(2);
-		  
+		  $(this).addClass('active').siblings().removeClass('active');
+		}
+		
+		$('.toInfo').attr(
+		  'href', $('.toInfo').attr('href').split('/').slice(0,4).concat(
+		    $('input[name=type]').val()).join('/'));
 		
 		$('.tabs #'+ id).slideDown(1000).siblings().slideUp();
 	});
 	
-	$('.back').click(() => $('.tabs #mytab').slideDown(100).siblings().slideUp());
+	$('.back').click(() => {
+	  $('.tabs #'+ $('.dp-link .active').attr('href')).slideDown(100).siblings().slideUp();
+	  $('.toInfo').attr('href', $('.toInfo').attr('href').split('/')
+	  .slice(0,4).concat(1).join('/'));
+	});
 	
 	// customers tab
 	$('.customers-tab span').click(function () {
@@ -74,7 +85,6 @@
 	 		$(this).find('.info').html(v.err()).css({color: 'red'});
 	 		setTimeout(() => $(this).find('.info').html(''), 3000);
 	 	} else {
-	 	  alert(v.auto)
 	 	  $.ajax({
 	 	    url: $(this).attr('action'),
 	 	    type: 'post',

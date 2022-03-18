@@ -9,4 +9,5 @@ initializeApp({credential: cert(JSON.parse(conf))});
 
 export const myTab = getFirestore().collection('customerTab');
 export const otherTab = getFirestore().collection('otherTab');
+export const download = getFirestore().collection('download');
 export const field = FieldValue;

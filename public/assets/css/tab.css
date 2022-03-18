@@ -62,7 +62,9 @@ a {
 }
 .container {
 	padding: 0 1rem;
+	min-height: calc(80vh);
 }
+
 .home i {
   font-size: inherit;
   font-style: italic;
@@ -99,6 +101,22 @@ h1 {
   padding: 1px 10px;
 }
 
+.balance div {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.balance div h2 {
+  margin-bottom: 0;
+}
+
+.balance div small {
+  margin-bottom: -1.2rem;
+  margin-left: 5px;
+}
+
 .add-btn {
   position: absolute;
   padding: 5px 1.2rem;
@@ -127,8 +145,8 @@ i {
 }
 
 .customers > div:even {
-	background: var(--pry);
-	color: #fff;
+	background: var(--hover);
+	color: var(--text);
 }
 
 .list {
@@ -138,14 +156,14 @@ i {
 .dot-menu {
 	position: absolute;
 	right: 10px;
-	top: 1rem;
+	top: .3rem;
 	z-index: 10;
 	background: transparent !important;
 }
 
 .dot-menu span {
 	display: block;
-	background: var(--pry);
+	background: var(--text);
 	padding: 4px;
 	margin: 4px;
 }
@@ -158,7 +176,7 @@ i {
 	display: none;
 	background: var(--pry);
 	position: absolute;
-	top: 1rem;
+	top: .5rem;
 	right: 2rem;
 	z-index: 100;
 }
@@ -207,31 +225,28 @@ header {
 	justify-content: center;
 	align-items: center;
 	grid-gap: 1rem;
+	padding: 1rem;
 	border-bottom: 1px solid var(--pry);
 }
 
 header .img {
 	border-radius: 100%;
-	background: var(--link);
+	background: var(--pry);
 	color: var(--txt);
 	font-size: 2rem;
 	font-weight: 700;
-	padding: 1rem 1.2rem;
+	padding: 1rem 1.5rem;
 }
-
-section {
-	padding: 1rem;
-} 
 
 .customers-tab {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	text-align: center;
-	border: 1px solid var(--link);
+	border: 1px solid var(--pry);
 }
 
 .customers-tab .active {
-	background: var(--link);
+	background: var(--pry);
 	color: var(--txt);
 	font-weight: bold;
 }
@@ -241,15 +256,18 @@ section {
 	padding: 10px;
 }
 
-.tablist h4, .list h4 {
+.tablist h3, .list h4, header h3 {
 	margin: 0 0 10px 0;
 }
 .tablist small, .list small {
-	font-size: .8rem;
+	display: block;
+	text-align: right;
 }
 
 .tablist p, .list p {
 	margin: 0;
+	padding: 5px 0;
+	line-height: 1.6;
 }
 
 .tablist, .list {
@@ -260,10 +278,26 @@ section {
 .customers div:nth-child(odd),
 #payment div:nth-child(odd),
 #tab div:nth-child(odd) {
-	background: var(--link);
+	background: var(--pry);
 	color: var(--txt) !important;
+	padding: 5px;
+}
+
+.customers div:nth-child(even) h4 a {
+  color: var(--pry) !important;
+}
+
+.customers div:nth-child(even) .dot-menu span {
+  background-color: var(--pry) !important;
 }
 
 .customers div:nth-child(odd) h4 a {
-	color: #ffffff99;
+	color: #ffffff;
+}
+
+@media (min-width: 30rem) {
+  body, nav {
+    max-width: 36rem;
+    margin: auto;
+  }
 }
