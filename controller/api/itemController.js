@@ -11,7 +11,6 @@ export const newitem = async (req, res) => {
 	  if (req.body.type == 1) var tab = myTab; else tab = otherTab;
 	  
 	  let update = await tab.doc(req.body.user).update({tab: field.arrayUnion(data)});
-	  console.log(update);
 	  
 	  if (update) res.send({code: 1, msg: 'Added to tab successfully!'});
 	  else res.send({code: 0, msg: 'Unknown error!'});
@@ -30,7 +29,6 @@ export const updateitem = async (req, res) => {
 	  if (req.body.type == 1) var tab = myTab; else tab = otherTab;
 	  
 	  let update = await tab.doc(req.body.user).update({payment: field.arrayUnion(data)});
-	  console.log(update);
 	  
 	  if (update) res.send({code: 1, msg: 'Tab updated successfully!'});
 	  else res.send({code: 0, msg: 'Unknown error!'});

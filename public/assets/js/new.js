@@ -15,7 +15,6 @@
 		}
 	});
  // tabs
-
 	$('.link a, .add-btn, .dp-link a').click(function (e) {
 	  if ($(this).attr('href') != '/download') e.preventDefault();
 		
@@ -55,18 +54,20 @@
 		  $('input[name=type]').val(2);
 		  $(this).addClass('active').siblings().removeClass('active');
 		}
-		
-		$('.toInfo').attr(
-		  'href', $('.toInfo').attr('href').split('/').slice(0,4).concat(
-		    $('input[name=type]').val()).join('/'));
-		
 		$('.tabs #'+ id).slideDown(1000).siblings().slideUp();
+		/*$('.toInfo').each(el => {
+  		    alert(el.attr('href'))
+		  $(el).attr(
+  		  'href', $('.toInfo').attr('href').split('/').slice(0,4).concat(
+  		    $('input[name=type]').val()).join('/'));
+  		    alert($(this).attr('href'))
+		})*/
 	});
-	
-	$('.back').click(() => {
-	  $('.tabs #'+ $('.dp-link .active').attr('href')).slideDown(100).siblings().slideUp();
-	  $('.toInfo').attr('href', $('.toInfo').attr('href').split('/')
-	  .slice(0,4).concat(1).join('/'));
+  
+  $('.back').click(() => {
+    $('.tabs #'+ $('.dp-link .active').attr('href')).slideDown(100).siblings().slideUp();
+	  //$('.toInfo').attr('href', $('.toInfo').attr('href').split('/')
+	  //.slice(0,4).concat(1).join('/'));
 	});
 	
 	// customers tab
@@ -89,13 +90,18 @@
 	 	    url: $(this).attr('action'),
 	 	    type: 'post',
 	 	    data: v.auto,
-	 	    beforeSend: () => $(this).find('.info').html('Connecting to the server...').css({color: '#333'}),
+	 	    beforeSend: () => {
+	 	      $(this).find('button').attr('disabled', 'disabled');
+	 	      $(this).find('.info').html('Connecting to the server...').css({color: '#333'});
+	 	    },
 	 	    success: e => {
 	 		    $(this).find('.info').html(e.msg).css({color: 'green'});
 	 		    if (e.code == 1)
 	 		      setTimeout(() => location.reload(), 3000);
 	 	    },
-	 	    error: e => {alert(JSON.stringify(e))
+	 	    error: e => {
+	 	      
+	 	      $(this).find('button').attr('disabled', '');
 	 	      $(this).find('.info').html(e.msg).css({color: 'red'});
 	 	    }
 	 	  });

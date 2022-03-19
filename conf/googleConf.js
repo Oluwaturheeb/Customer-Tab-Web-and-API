@@ -4,7 +4,7 @@ const Google = passport => {
 	passport.use(new GoogleStragegy({
 		clientID: process.env.gID,
 		clientSecret: process.env.gSec,
-		callbackURL: 'https://customertab.herokuapp.com/login/google/auth'
+		callbackURL: 'https://customertab.herokuapp.com/login/google/auth', //'http://localhost:8000/login/google/auth', 
 	}, async (accessToken, refreshToken, profile, done) => {
 		done(null, profile);
 	}));
